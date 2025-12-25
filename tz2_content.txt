@@ -1,0 +1,313 @@
+ТЕХНИЧЕСКОЕ ЗАДАНИЕ
+на разработку демонстрационной версии HALO
+Версия: 2.1 (финальная)
+1. Цель проекта
+Создать демо-кабинет продукта HALO — омниканального ИИ ассистента GINAI, демонстрирующий:
+реальный звонок HALO Voice,
+анализ разговора,
+follow-up сообщение,
+отправку SMS с deep-link в Telegram,
+демо-чат, визуализирующий общение,
+создание CRM-карточки,
+ленту обращений (демо + реальные),
+аналитику.
+Демо должно производить «wow-эффект» и работать полностью автономно, без внешних интеграций, кроме реального звонка.
+2. Общая логика DEMO
+Клиент входит в демо-кабинет HALO.
+Вводит номер телефона и минимальные настройки ассистента.
+Нажимает «Запустить демо».
+HALO выполняет реальный звонок через существующий endpoint /call.
+После завершения звонка система:
+анализирует разговор: Whisper → transcript → GPT → summary,
+формирует follow-up сообщение,
+отправляет SMS на номер клиента со ссылкой вида:
+https://t.me/<bot>?start=<call_id_hash>,
+создаёт мок-чат, содержащий follow-up.
+В кабинете клиент видит:
+свои реальные звонок и чат,
+CRM-плашку «добавлено в CRM»,
+общую демо-аналитику,
+таблицу обращений (демо + реальные).
+Если клиент перейдёт по deep-link в Telegram:
+бот принимает параметр,
+backend привязывает Telegram user_id к звонку,
+опционально может отправляться настоящий follow-up.
+ 3. Настройки ассистента (Frontend → Backend)
+Поля, которые клиент заполняет при запуске демо:
+3.1. Голос ассистента
+male
+female
+neutral
+3.2. Язык
+Auto (определить язык автоматически)
+Русский (RU)
+Узбекский (UZ)
+Таджикский (TJ)
+Казахский (KK)
+Киргизский (KY)
+Туркменский (TM)
+Азербайджанский (AZ)
+Дари / Афганский (FA-AF)
+Английский (EN)
+Турецкий (TR)
+Auto: ассистент начинает разговор на русском → при детекции иного языка Whisper → GPT/TTS автоматически переходят на язык клиента.
+3.3. Промпт ассистента
+Текстовое поле. Backend получает его и использует для формирования контекста звонка.
+4. Backend: требования и API
+4.1. Endpoint: создать демо-сессию
+POST /demo/session
+Request:
+{
+  "phone": "+79XXXXXXXXX",
+  "language": "auto",
+  "voice": "female",
+  "prompt": "строка промпта"
+}
+Backend выполняет:
+Создаёт demo_session (UUID).
+Генерирует call_id_hash (используется в deep link).
+Запускает звонок через существующий /call:
+передаёт параметры голоса,
+передаёт начальные инструкции (промпт).
+Сохраняет:
+demo_session.call_id,
+demo_session.call_id_hash,
+состояние = initiated.
+После webhook события call_completed:
+Whisper → транскрипт
+GPT → summary
+GPT → follow-up message
+Отправляет SMS клиенту:
+текст: «Спасибо за разговор! Продолжим здесь: <telegram_link>»
+ссылка вида: https://t.me/<bot>?start=<call_id_hash>
+Создаёт запись чата:
+{
+  "type": "chat",
+  "is_demo": false,
+  "call_id": "real_call_uuid",
+  "messages": [
+    {
+      "from": "assistant",
+      "text": "<follow_up_message>"
+    }
+  ]
+}
+Создаёт CRM-запись (визуализация, не интеграция):
+{
+  "call_id": "...",
+  "client_phone": "+79...",
+  "status": "<disposition>",
+  "interest": "<gpt_extracted_interest>",
+  "telegram_link_sent": true
+}
+Response:
+{
+  "demo_session_id": "uuid",
+  "status": "initiated"
+}
+4.2. Endpoint: статус демо
+GET /demo/session/{id}
+Response:
+{
+  "call_status": "pending|completed|failed",
+  "analysis_status": "pending|done",
+  "followup_status": "pending|done",
+  "sms_status": "pending|sent",
+  "crm_status": "pending|added",
+  "chat_ready": true
+}
+4.3. Endpoint: аналитика
+GET /demo/analytics
+Backend возвращает статистику:
+{
+  "totals": {
+    "calls": 120,
+    "chats": 80,
+    "lead_rate": 0.37,
+    "avg_call_duration_sec": 104
+  },
+  "funnel": {
+    "called": 120,
+    "talked": 95,
+    "interested": 45,
+    "lead": 18
+  }
+}
+Данные частично демо, частично реальные.
+4.4. Endpoint: список всех обращений
+GET /demo/interactions
+Backend возвращает:
+50 демо-звонков
+50 демо-чатов
+реальные звонок и чат клиента
+Пример:
+{
+  "items": [
+    {
+      "id": "demo-call-1",
+      "is_demo": true,
+      "type": "call",
+      "channel": "voice",
+      "created_at": "...",
+      "disposition": "interested"
+    },
+    {
+      "id": "real-call-uuid",
+      "is_demo": false,
+      "type": "call",
+      "channel": "voice",
+      "created_at": "...",
+      "disposition": "interested"
+    },
+    {
+      "id": "real-chat-uuid",
+      "is_demo": false,
+      "type": "chat",
+      "channel": "telegram",
+      "created_at": "...",
+      "summary": "..."
+    }
+  ]
+}
+4.5. Endpoint: детали обращения
+GET /demo/interaction/{id}
+Для звонка:
+{
+  "id": "...",
+  "type": "call",
+  "is_demo": false,
+  "phone_masked": "+7 9XX XXX-12-34",
+  "created_at": "...",
+  "duration_sec": 93,
+  "disposition": "interested",
+  "summary": "Краткое резюме разговора",
+  "transcript": [
+    { "speaker": "assistant", "text": "Здравствуйте!" },
+    { "speaker": "user", "text": "Добрый день." }
+  ],
+  "crm_record": {
+    "status": "added",
+    "interest": "узнать стоимость",
+    "telegram_link_sent": true
+  }
+}
+Для чата:
+{
+  "id": "...",
+  "type": "chat",
+  "is_demo": false,
+  "created_at": "...",
+  "summary": "Короткое резюме follow-up",
+  "messages": [
+    { "from": "assistant", "text": "Спасибо за разговор! Вот обещанная информация…" }
+  ]
+}
+4.6. Telegram deep link авторизация
+Когда пользователь нажимает ссылку:
+https://t.me/HALO_DEMO_BOT?start=CALL_abc123
+Telegram отправляет вебхук:
+{
+  "message": {
+    "from": { "id": 128392991, "username": "client123" },
+    "text": "/start CALL_abc123"
+  }
+}
+Backend должен:
+Найти demo_session по call_id_hash.
+Привязать:
+telegram_user_id
+telegram_username
+Отметить в CRM-данных:
+telegram_connected: true
+Важно: в DEMO продолжаем показывать мок-чат даже если Telegram подключен.
+ 5. FRONTEND
+5.1. Экран «Запустить демо»
+Поля:
+Телефон
+Язык (ru, uz, tj, auto)
+Голос (male, female, neutral)
+Промпт
+Кнопка «Запустить демо»
+5.2. Экран «Статус демо»
+Статусы обновляются через /demo/session/{id}:
+«Выполняем звонок…»
+«Анализируем разговор…»
+«Готовим follow-up…»
+«Отправляем SMS…»
+«Добавляем в CRM…»
+Кнопка: «Перейти к аналитике»
+5.3. Экран «Аналитика HALO»
+Блок 1 — Ваши данные (реальные)
+Итог звонка (disposition)
+Summary звонка
+Follow-up сообщение
+CRM-плашка:
+статус
+интерес клиента
+факт отправки Telegram-ссылки
+Кнопки:
+«Посмотреть звонок»
+«Посмотреть чат»
+Блок 2 — Общая статистика (демо + реальные)
+Количество звонков
+Количество чатов
+Конверсия
+Средняя длительность
+Воронка
+Блок 3 — Таблица обращений
+Столбцы:
+Тип (call/chat)
+Канал (voice / telegram)
+Дата/время
+Статус / disposition
+Источник (demo/you)
+Кнопка «Детали»
+Реальные данные клиента подсвечены плашкой «Вы».
+5.4. Модалка «Детали звонка»
+Содержит:
+дату
+длительность
+disposition
+summary
+transcript (в виде диалога)
+CRM-блок:
+статус = «добавлено в CRM»
+интерес клиента
+канал Telegram: «ссылка отправлена»
+5.5. Модалка «Детали чата»
+Мок-чат, визуально напоминающий Telegram:
+аватар HALO
+время сообщения
+follow-up текст
+метка «демо-чат»
+6. Демо-данные
+Сформировать:
+50 демо-звонков, каждый с:
+датой,
+коротким transcript,
+summary,
+disposition.
+50 демо-чатов, каждый с:
+1–3 сообщениями,
+summary.
+Все демо-данные:
+is_demo: true
+7. Ограничения (что НЕ нужно делать)
+Не интегрировать реальный Telegram в демо
+Не отправлять реальные сообщения в чат
+Не реализовывать конструктор сценариев
+Не реализовывать омниканальность в реальном времени
+Не делать аналитику фаз разговора
+Не подключать CRM
+Не делать систему авторизации
+8. Результат разработки
+По завершении работы должен быть доступен:
+Полностью рабочий демо-кабинет HALO
+Реальный звонок клиенту
+Follow-up сообщение (мок-чат)
+SMS → deep link в Telegram
+CRM-плашка с данными звонка
+Много демо-данных, создающих эффект «система работает давно»
+Аналитика + воронка
+Таблица всех обращений
+Детализация звонка и чат

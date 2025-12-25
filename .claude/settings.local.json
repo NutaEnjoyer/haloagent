@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(python -c:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(curl:*)",
+      "Bash(dir /b:*)",
+      "Bash(docker-compose logs:*)",
+      "Bash(docker-compose restart:*)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(docker logs:*)",
+      "Bash(findstr:*)",
+      "Bash(npm install)",
+      "Bash(npm view:*)",
+      "Bash(node index.js:*)",
+      "Bash(python -m json.tool:*)",
+      "Bash(docker restart:*)",
+      "Bash(python:*)",
+      "Bash(ping:*)",
+      "WebSearch",
+      "WebFetch(domain:gist.github.com)",
+      "WebFetch(domain:voximplant.com)",
+      "Bash(timeout /t 5)",
+      "Bash(ls:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

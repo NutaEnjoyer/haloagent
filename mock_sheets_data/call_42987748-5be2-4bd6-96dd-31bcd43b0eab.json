@@ -1,0 +1,14 @@
+{
+  "id": "42987748-5be2-4bd6-96dd-31bcd43b0eab",
+  "phone": "+79991234567",
+  "status": "completed",
+  "final_disposition": "unknown",
+  "started_at": "2025-12-15T14:55:30.870531+00:00",
+  "ended_at": "2025-12-15T15:55:33.067906+00:00",
+  "duration_sec": 0,
+  "transcript": [],
+  "short_summary": "Не дозвонились: статус completed",
+  "demo_voice": "shimmer",
+  "demo_language": "auto",
+  "demo_prompt": "Вы - вежливый оператор call-центра HALO. Ваша задача: представить продукт, узнать интерес клиента и предложить следующие шаги."
+}

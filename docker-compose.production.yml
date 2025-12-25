@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: halo-backend-prod
+    restart: always
+    ports:
+      - "127.0.0.1:8000:8000"  # Expose only to localhost for nginx proxy
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/var/log/callerapi
+      - ./mock_sheets_data:/app/mock_sheets_data
+    networks:
+      - halo-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 1G
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: halo-frontend-prod
+    restart: always
+    ports:
+      - "127.0.0.1:8012:80"  # Expose only to localhost for nginx proxy
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - halo-network
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  halo-network:
+    driver: bridge

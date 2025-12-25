@@ -1,0 +1,45 @@
+2025-12-20 02:38:17.668 Loading scenario OutboundCall
+2025-12-20 02:38:17.668 Sent event to JS VoxEngine.customData with params [{"call_id": "9eba5160-1595-4b4c-b909-c52bcce8a6b3", "phone": "+79019433546", "caller_id": "+78652594087", "webhook_url": "https://e537cde5faed.ngrok-free.app/voximplant/events"} ;  ]
+2025-12-20 02:38:17.668 Sent event to JS onPhoneEvent with params [{name = Application.Started ; accountId = 10042950 ; domainName = halodemo.ginai-acc.voximplant.com ; dialplanName = mainrule ; dialplanId = 0 ; userId = -1 ; applicationId = 47277483 ; accessURL = http://185.164.149.28:12092/request/81EAA560DBB934DC.1766198297.10425903_185.164.149.28/37EB6B70474C25DB ; accessSecureURL = https://www-ru-29-28.voximplant.com:12093/request/81EAA560DBB934DC.1766198297.10425903_185.164.149.28/37EB6B70474C25DB ; logURL = https://storage-gw-ru-02.voximplant.com/voximplant-logs-secure/2025/12/20/MzYxOWIwY2Q5YTFiMzIyOWJiOGY0NjQ3Y2JhY2Y3YWQvaHR0cDovL3d3dy1ydS0yOS0yOC52b3hpbXBsYW50LmNvbTo4MDgwL2xvZ3MvMjAyNS8xMi8yMC8wMjM4MTdfODFFQUE1NjBEQkI5MzREQy4xNzY2MTk4Mjk3LjEwNDI1OTAzXzE4NS4xNjQuMTQ5LjI4LmxvZw--?sessionid=4234864294 ; sessionId = 4234864294 ; nluAddresses = [https://ai-a1-1.voximplant.com/ ;  ] ; config = {acceptReInviteByDefault = true ; } ; } ;  ]
+2025-12-20 02:38:17.735 Executing JS command: SetCustomData with params [{data = {"call_id": "9eba5160-1595-4b4c-b909-c52bcce8a6b3", "phone": "+79019433546", "caller_id": "+78652594087", "webhook_url": "https://e537cde5faed.ngrok-free.app/voximplant/events"} ; } ;  ]
+2025-12-20 02:38:17.735 VoxEngine version: 7.16.0
+2025-12-20 02:38:17.736 === Scenario Started ===
+2025-12-20 02:38:17.736 Call ID: 9eba5160-1595-4b4c-b909-c52bcce8a6b3
+2025-12-20 02:38:17.736 Phone: +79019433546
+2025-12-20 02:38:17.736 Caller ID: +78652594087
+2025-12-20 02:38:17.736 Executing JS command: CallPSTN with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; } ;  {callerid = 78652594087 ; carrier = 0 ; dump = NULL ; number = 79019433546 ; retryOn480 = NULL ; } ;  ]
+2025-12-20 02:38:17.737 Executing JS command: EnableMediaStatistics with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; } ;  ]
+2025-12-20 02:38:17.737 Call initiated
+2025-12-20 02:38:26.249 CallId=l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM: Enable media statistics for l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM : https://storage-gw-ru-02.voximplant.com/voximplant-logs-secure/2025/12/20/YmUyN2ZlMDMzMTRkYmNiZjgwNzE2YzgwMmIwYzY3ZDkvaHR0cDovL3d3dy1ydS0yOS0yOC52b3hpbXBsYW50LmNvbTo4MDgwL2xvZ3MvMjAyNS8xMi8yMC84MUVBQTU2MERCQjkzNERDLjE3NjYxOTgyOTcuMTA0MjU5MDNfMTg1LjE2NC4xNDkuMjhfbDgwd2NoYWxUZUNqc2pkdnBlRVlVbmg4bnNCaWcwM1JzcEVWOXlTcFpETS5jc3Y-?sessionid=4234864294
+2025-12-20 02:38:26.249 Sent event to JS onPhoneEvent with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; name = Call.AudioStarted ; sipTransport = UDP ; headers = {} ; code = 180 ; } ;  ]
+2025-12-20 02:38:26.289 Sent event to JS onPhoneEvent with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; name = Call.FirstAudioPacketReceived ; } ;  ]
+2025-12-20 02:38:38.384 Sent event to JS onPhoneEvent with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; name = Call.Connected ; sipCallId = 47c1eba3-6afe-4b70-94f3-c96c49138e2e ; sipTransport = UDP ; headers = {} ; displayName =  ; encrypted = false ; } ;  ]
+2025-12-20 02:38:38.408 Sent event to JS onPhoneEvent with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; name = Call.AudioQualityDetected ; quality = Standard ; } ;  ]
+2025-12-20 02:38:38.426 === Call Connected ===
+2025-12-20 02:38:38.426 Conference room ID: 9eba5160-1595-4b4c-b909-c52bcce8a6b3
+2025-12-20 02:38:38.429 Executing JS command: CreatePlayer with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; } ;  {addSpeak = true ; extparams = NULL ; isGrpc = false ; language = ru-RU ; provider = freemium_ru ; say = Здравствуйте! Соединяю с ассистентом. ; voice = female ; } ;  ]
+2025-12-20 02:38:38.433 Sent event to JS onPhoneEvent with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; name = Player.Created ; } ;  ]
+2025-12-20 02:38:38.433 Executing JS command: SendMedia with params [{from = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; to = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; } ;  ]
+2025-12-20 02:38:38.615 Sent event to JS onPhoneEvent with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; name = Player.PlaybackReady ; serverRequestId = ca93c7a13f8f65fa0c7afc3e2d16403f ; } ;  ]
+2025-12-20 02:38:38.631 Sent event to JS onPhoneEvent with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; name = Player.Started ; duration = 0 ; } ;  ]
+2025-12-20 02:38:38.656 Sent event from JS onPhoneEvent with params {"name":"Call.PlaybackReady","id":"l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM","call":{"rism":{},"is_conf":false}}
+2025-12-20 02:38:38.657 Sent event from JS onPhoneEvent with params {"duration":0,"name":"Call.PlaybackStarted","id":"l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM","call":{"rism":{},"is_conf":false}}
+2025-12-20 02:38:41.671 Sent event to JS onPhoneEvent with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; name = Player.PlaybackFinished ; serverRequestId = ca93c7a13f8f65fa0c7afc3e2d16403f ; } ;  ]
+2025-12-20 02:38:41.714 Sent event from JS onPhoneEvent with params {"name":"Call.PlaybackFinished","id":"l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM","call":{"rism":{},"is_conf":false}}
+2025-12-20 02:39:01.501 Sent event to JS onPhoneEvent with params [{id = l80wchalTeCjsjdvpeEYUnh8nsBig03RspEV9ySpZDM ; name = Call.Disconnected ; headers = {Reason = Q.850 ;text="Normal call clearing";cause=16 ; } ; direction = Russia Mobile ; duration = 24 ; cost = 1.992 ; internalCode = 16 ; reason = Normal call clearing ; } ;  ]
+2025-12-20 02:39:01.543 === Call Disconnected ===
+2025-12-20 02:39:01.543 Duration: 24 seconds
+2025-12-20 02:39:01.543 Terminating request..., stack=VoxEngine.terminate@/voxengine.js:68:51
+onCallDisconnected@OutboundCall:72:15
+dispatchEvent@/__voxengine.js:728:32
+Call/this.dispatchEvent@/call.js:384:48
+Application/this.onPhoneEvent@/application.js:876:21
+onPhoneEvent@/main.js:235:21
+@/ line 1 > eval:1:13
+JSession_onCall@/:1:80
+2025-12-20 02:39:01.545 Executing JS command: terminating with params []
+2025-12-20 02:39:01.546 Sent event to JS onPhoneEvent with params [{id = H6nrC87kS3GZKvoY7A-NWvz9VQ-KwkXQhN2yBk7aR_A ; name = Player.Stopped ; } ;  ]
+2025-12-20 02:39:01.546 Terminating (onClose)
+2025-12-20 02:39:01.546 Executing JS command: close with params {CpuMillis = 84 ; }
+2025-12-20 02:39:01.546 Normal termination
+2025-12-20 02:39:01.546 Session terminated

@@ -1,0 +1,14 @@
+{
+  "id": "25d79fa7-0b03-4c69-beea-c24796f459ea",
+  "phone": "+79019433546",
+  "status": "failed",
+  "final_disposition": "unknown",
+  "started_at": null,
+  "ended_at": "2025-12-19T15:37:18.671407+00:00",
+  "duration_sec": 0,
+  "transcript": [],
+  "short_summary": "Не дозвонились: статус failed",
+  "demo_voice": "shimmer",
+  "demo_language": "ru",
+  "demo_prompt": "Вы - вежливый и дружелюбный голосовой ассистент компании HALO. Поздоровайтесь с клиентом, представьтесь и спросите, чем можете помочь. Говорите естественно и по-человечески."
+}

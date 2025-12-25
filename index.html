@@ -1,0 +1,165 @@
+<!-- see YouTube Video about it — https://youtu.be/VcBJmHNSxG4 -->
+<html>
+<head>
+<meta charset="utf-8" />
+<script type="text/javascript" src="https://cdn.voximplant.com/edge/voximplant.min.js"></script>
+<script type="text/javascript">
+var initialized = false, // SDK загружено
+     loggedIn = false, // пользователь авторизован
+     connected = false, // получено соединение с VoxImplant сервером
+     currentCall = null, // текущий звонок
+     voxImplant;
+
+// инициализируем SDK после загрузки страницы
+window.addEventListener('load', function() {
+     voxImplant = VoxImplant.getInstance();
+
+     // добавляем прослушивателей основных событий
+     // событие загрузки SDK
+     voxImplant.addEventListener(VoxImplant.Events.SDKReady, handleSDKReady);
+     // событие установки соединения с сервером VoxImplant
+     voxImplant.addEventListener(VoxImplant.Events.ConnectionEstablished, handleConnectionEstablished);
+     // событие авторизации пользователя на сервере VoxImplant
+     voxImplant.addEventListener(VoxImplant.Events.AuthResult, handleAuthResult);
+     // событие ошибки микрофона
+     voxImplant.addEventListener(VoxImplant.Events.MicAccessResult, handleMicAccessResult);
+
+     // ВАЖНО: запускаем инициализацию SDK
+     console.log('Инициализация SDK...');
+     voxImplant.init();
+});
+
+// SDK загружен, соединяемся с VoxImplant сервером
+function handleSDKReady() {
+     initialized = true;
+     updateStatus('Подключение к серверу...');
+     voxImplant.connect();
+}
+
+// соединились с VoxImplant сервером успешно, авторизуем юзера
+function handleConnectionEstablished() {
+     connected = true;
+     updateStatus('Авторизация...');
+     login();
+}
+
+// проверяем статус авторизации
+function handleAuthResult(e) {
+     if (e.result) {
+          // Авторизовались успешно
+          loggedIn = true;
+          console.log('Авторизация успешна! Готов к звонку.');
+          updateStatus('Готов к звонку', true);
+          // НЕ звоним автоматически - ждем клика пользователя
+     } else {
+          console.error('Ошибка авторизации: ' + e.code);
+          updateStatus('Ошибка авторизации', false);
+     }
+}
+
+// обработка доступа к микрофону
+function handleMicAccessResult(e) {
+     if (e.result) {
+          console.log('Доступ к микрофону получен');
+     } else {
+          console.error('Доступ к микрофону запрещен!');
+          alert('Пожалуйста, разрешите доступ к микрофону для звонка');
+     }
+}
+
+// проводим авторизацию
+function login(){
+    // данные созданного пользователя и приложения
+	voxImplant.login("firstuser@halodemo.ginai-acc.n3.voximplant.com", "6S[3rz0X");
+}
+
+function makeCall(){
+     console.log('Запрашиваем доступ к микрофону...');
+
+     // Сначала запрашиваем доступ к микрофону
+     voxImplant.showLocalVideo(false);
+
+     // Создаем звонок с настройками
+     currentCall = voxImplant.call({
+          number: "firstscenario", // имя вашего правила из Routing
+          video: false, // только аудио
+          customData: JSON.stringify({
+               phoneNumber: "+79279052818", // номер для звонка
+               userId: "firstuser",
+               timestamp: new Date().toISOString(),
+               // можно добавить любые другие параметры
+               someParam: "значение"
+          })
+     });
+
+     // Добавляем обработчики событий звонка
+     currentCall.addEventListener(VoxImplant.CallEvents.Connected, function(e) {
+          console.log('Звонок установлен!');
+     });
+
+     currentCall.addEventListener(VoxImplant.CallEvents.Failed, function(e) {
+          console.error('Звонок не удался:', e);
+          alert('Ошибка: ' + e.reason + ' (код: ' + e.code + ')');
+     });
+
+     currentCall.addEventListener(VoxImplant.CallEvents.Disconnected, function(e) {
+          console.log('Звонок завершен');
+          currentCall = null;
+     });
+
+     console.log('Звонок инициирован');
+}
+
+function testCall() {
+     // проверяем что voxImplant загружен
+     if (!voxImplant) {
+          console.error('VoxImplant SDK еще не загружен');
+          return;
+     }
+
+     // если SDK не инициализирован - проводим процесс
+     if (!initialized) voxImplant.init();
+     else {
+          // если не установлено соединение с сервером VoxImplant - устанавливаем
+          if (!voxImplant.connected()) voxImplant.connect();
+          else {
+               // если юзер не авторизован - авторизуем, если авторизован - звоним
+               if (!loggedIn) login();
+               else makeCall();
+          }
+     }
+}
+</script>
+</head>
+<body>
+     <h2>Voximplant Test Call</h2>
+     <p>Статус: <span id="status">Загрузка...</span></p>
+     <button onclick="testCall()" id="callBtn" disabled>Позвони мне, позвони!</button>
+     <br/><br/>
+     <div id="log" style="border: 1px solid #ccc; padding: 10px; max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+
+     <script>
+          // Добавляем логирование на страницу
+          var originalLog = console.log;
+          var originalError = console.error;
+
+          console.log = function(msg) {
+               originalLog.apply(console, arguments);
+               document.getElementById('log').innerHTML += '<div style="color: green;">' + msg + '</div>';
+          };
+
+          console.error = function(msg) {
+               originalError.apply(console, arguments);
+               document.getElementById('log').innerHTML += '<div style="color: red;">ERROR: ' + msg + '</div>';
+          };
+
+          // Обновляем статус
+          function updateStatus(text, enableBtn) {
+               document.getElementById('status').textContent = text;
+               if (enableBtn !== undefined) {
+                    document.getElementById('callBtn').disabled = !enableBtn;
+               }
+          }
+     </script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+*.docx
+docs/
+
+# Exclude all .txt files except requirements.txt
+*.txt
+!requirements.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Environment files (will be mounted separately)
+.env
+.env.local
+.env.*
+
+# Credentials
+credentials.json
+*.pem
+*.key
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+nul
+
+# Logs (will be mounted separately)
+logs/
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+test_*.py
+*_test.py
+
+# Mock data (will be mounted separately)
+mock_sheets_data/
+
+# Scripts
+*.ps1
+*.sh
+*.bat
+
+# Frontend (not needed in backend image)
+frontend/
+
+# Voximplant bridge
+voximplant-bridge/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
