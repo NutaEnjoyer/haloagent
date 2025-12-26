@@ -79,7 +79,7 @@ function App() {
         </main>
 
         <footer className="app-footer">
-          <p>© 2025 HALO от GINAI. Все права защищены. | Премиум AI Голосовой Ассистент</p>
+          <p>© 2025 HALO by GINAI. Developed by Maxim Dolgov. All rights reserved. | Premium AI Voice Assistant</p>
         </footer>
       </div>
     </Router>
