@@ -151,10 +151,11 @@ async def create_demo_session(
             # Get Voximplant credentials from environment
             VOXIMPLANT_ACCOUNT_ID = os.getenv("VOXIMPLANT_ACCOUNT_ID")
             VOXIMPLANT_API_KEY = os.getenv("VOXIMPLANT_API_KEY")
+            VOXIMPLANT_RULE_ID = os.getenv("VOXIMPLANT_RULE_ID")
             VOXIMPLANT_SCENARIO_ID = os.getenv("VOXIMPLANT_SCENARIO_ID")
             BACKEND_URL = os.getenv("BACKEND_URL")
 
-            if not all([VOXIMPLANT_ACCOUNT_ID, VOXIMPLANT_API_KEY, VOXIMPLANT_SCENARIO_ID, BACKEND_URL]):
+            if not all([VOXIMPLANT_ACCOUNT_ID, VOXIMPLANT_API_KEY, VOXIMPLANT_RULE_ID, VOXIMPLANT_SCENARIO_ID, BACKEND_URL]):
                 raise ValueError("Missing Voximplant configuration in environment")
 
             # Generate call_id for tracking
@@ -191,16 +192,16 @@ async def create_demo_session(
             logger.info(f"Stored session data for call_id={voximplant_call_id}")
 
             # Start call via Voximplant Platform API
-            # Use scenario_id directly instead of rule_id to pass script_custom_data
+            # Use both rule_id and specify script_custom_data
             payload = {
                 'account_id': VOXIMPLANT_ACCOUNT_ID,
                 'api_key': VOXIMPLANT_API_KEY,
-                'scenario_id': VOXIMPLANT_SCENARIO_ID,
+                'rule_id': VOXIMPLANT_RULE_ID,
                 'script_custom_data': json.dumps(script_custom_data)
             }
 
             logger.info(f"Voximplant API request payload keys: {list(payload.keys())}")
-            logger.info(f"Using scenario_id: {VOXIMPLANT_SCENARIO_ID}")
+            logger.info(f"Using rule_id: {VOXIMPLANT_RULE_ID}")
 
             response = requests.post('https://api.voximplant.com/platform_api/StartScenarios', data=payload, timeout=10)
 
