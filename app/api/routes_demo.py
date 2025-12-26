@@ -192,12 +192,17 @@ async def create_demo_session(
 
             # Start call via Voximplant Platform API
             # Use scenario_id directly instead of rule_id to pass script_custom_data
-            response = requests.post('https://api.voximplant.com/platform_api/StartScenarios', data={
+            payload = {
                 'account_id': VOXIMPLANT_ACCOUNT_ID,
                 'api_key': VOXIMPLANT_API_KEY,
                 'scenario_id': VOXIMPLANT_SCENARIO_ID,
                 'script_custom_data': json.dumps(script_custom_data)
-            }, timeout=10)
+            }
+
+            logger.info(f"Voximplant API request payload keys: {list(payload.keys())}")
+            logger.info(f"Using scenario_id: {VOXIMPLANT_SCENARIO_ID}")
+
+            response = requests.post('https://api.voximplant.com/platform_api/StartScenarios', data=payload, timeout=10)
 
             result = response.json()
             logger.info(f"Voximplant API response: {json.dumps(result, ensure_ascii=False)}")
