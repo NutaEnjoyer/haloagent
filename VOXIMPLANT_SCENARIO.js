@@ -5,7 +5,7 @@
 require(Modules.ASR);
 
 var callId = "";
-var backendUrl = "https://ef3921feae4a.ngrok-free.app";
+var backendUrl = "https://halo-ai.ru/api";
 var webhookUrl = backendUrl + "/voximplant/events";
 var greetingMessage = "Здравствуйте! Я голосовой ассистент HALO. Чем могу помочь?";
 var systemPrompt = "";
