@@ -1,16 +1,34 @@
 import requests
+import os
+from dotenv import load_dotenv
 
-# Read scenario code
-with open(r'C:\Users\user\Desktop\callerapi\temp_scenario.js', 'r', encoding='utf-8') as f:
-    code = f.read()
+load_dotenv()
 
-# Upload to Voximplant
-data = {
-    'account_id': '10042950',
-    'api_key': '633eadbc-6cb2-447e-a0b1-c40d2c5e4bef',
-    'scenario_id': '2992893',
-    'scenario_script': code
-}
+ACCOUNT_ID = os.getenv("VOXIMPLANT_ACCOUNT_ID")
+API_KEY = os.getenv("VOXIMPLANT_API_KEY")
+SCENARIO_ID = os.getenv("VOXIMPLANT_SCENARIO_ID")
 
-response = requests.post('https://api.voximplant.com/platform_api/SetScenarioInfo/', data=data)
-print(response.text)
+# Read scenario
+with open("VOXIMPLANT_SCENARIO.js", "r", encoding="utf-8") as f:
+    scenario_script = f.read()
+
+print(f"Uploading scenario {SCENARIO_ID}...")
+print(f"Scenario size: {len(scenario_script)} bytes")
+
+# Upload to Voximplant using correct API method
+url = "https://api.voximplant.com/platform_api/SetScenarioInfo"
+response = requests.post(url, data={
+    "account_id": ACCOUNT_ID,
+    "api_key": API_KEY,
+    "scenario_id": SCENARIO_ID,
+    "scenario_script": scenario_script
+})
+
+print(f"\nResponse: {response.text}")
+result = response.json()
+if "result" in result and result["result"] == 1:
+    print("SUCCESS - Scenario uploaded!")
+else:
+    print("FAILED - Upload error")
+    if "error" in result:
+        print(f"Error: {result['error']}")

@@ -190,11 +190,11 @@ async def create_demo_session(
 
             logger.info(f"Stored session data for call_id={voximplant_call_id}")
 
-            # Start call via Voximplant Platform API
+            # Start call via Voximplant Platform API (use scenario_id instead of rule_id)
             response = requests.post('https://api.voximplant.com/platform_api/StartScenarios', data={
                 'account_id': VOXIMPLANT_ACCOUNT_ID,
                 'api_key': VOXIMPLANT_API_KEY,
-                'rule_id': VOXIMPLANT_RULE_ID,
+                'scenario_id': VOXIMPLANT_SCENARIO_ID,
                 'script_custom_data': json.dumps(script_custom_data)
             }, timeout=10)
 
