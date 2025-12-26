@@ -152,9 +152,10 @@ async def create_demo_session(
             VOXIMPLANT_ACCOUNT_ID = os.getenv("VOXIMPLANT_ACCOUNT_ID")
             VOXIMPLANT_API_KEY = os.getenv("VOXIMPLANT_API_KEY")
             VOXIMPLANT_RULE_ID = os.getenv("VOXIMPLANT_RULE_ID")
+            VOXIMPLANT_SCENARIO_ID = os.getenv("VOXIMPLANT_SCENARIO_ID")
             BACKEND_URL = os.getenv("BACKEND_URL")
 
-            if not all([VOXIMPLANT_ACCOUNT_ID, VOXIMPLANT_API_KEY, VOXIMPLANT_RULE_ID, BACKEND_URL]):
+            if not all([VOXIMPLANT_ACCOUNT_ID, VOXIMPLANT_API_KEY, VOXIMPLANT_SCENARIO_ID, BACKEND_URL]):
                 raise ValueError("Missing Voximplant configuration in environment")
 
             # Generate call_id for tracking
