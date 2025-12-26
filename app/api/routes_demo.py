@@ -151,7 +151,6 @@ async def create_demo_session(
             # Get Voximplant credentials from environment
             VOXIMPLANT_ACCOUNT_ID = os.getenv("VOXIMPLANT_ACCOUNT_ID")
             VOXIMPLANT_API_KEY = os.getenv("VOXIMPLANT_API_KEY")
-            VOXIMPLANT_RULE_ID = os.getenv("VOXIMPLANT_RULE_ID")
             VOXIMPLANT_SCENARIO_ID = os.getenv("VOXIMPLANT_SCENARIO_ID")
             BACKEND_URL = os.getenv("BACKEND_URL")
 
@@ -192,14 +191,16 @@ async def create_demo_session(
             logger.info(f"Stored session data for call_id={voximplant_call_id}")
 
             # Start call via Voximplant Platform API
+            # Use scenario_id directly instead of rule_id to pass script_custom_data
             response = requests.post('https://api.voximplant.com/platform_api/StartScenarios', data={
                 'account_id': VOXIMPLANT_ACCOUNT_ID,
                 'api_key': VOXIMPLANT_API_KEY,
-                'rule_id': VOXIMPLANT_RULE_ID,
+                'scenario_id': VOXIMPLANT_SCENARIO_ID,
                 'script_custom_data': json.dumps(script_custom_data)
             }, timeout=10)
 
             result = response.json()
+            logger.info(f"Voximplant API response: {json.dumps(result, ensure_ascii=False)}")
 
             if "error" in result:
                 error_msg = result['error'].get('msg', 'Unknown error')

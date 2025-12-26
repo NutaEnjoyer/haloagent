@@ -21,17 +21,20 @@ var isSpeaking = false;  // Track if AI is currently speaking (for barge-in)
 
 /* ===================== APP START ===================== */
 
-VoxEngine.addEventListener(AppEvents.Started, function (e) {
+VoxEngine.addEventListener(AppEvents.Started, function () {
     Logger.write("[ASR] Scenario started");
-    Logger.write("[ASR] e.customData: " + e.customData);
+
+    // Get custom data from VoxEngine.customData() method
+    var customDataRaw = VoxEngine.customData();
+    Logger.write("[ASR] VoxEngine.customData(): " + customDataRaw);
 
     var targetPhone = "+79019433546";  // Default phone for testing
 
     // Parse custom data from StartScenarios API
     var customData = null;
-    if (e.customData) {
+    if (customDataRaw) {
         try {
-            customData = JSON.parse(e.customData);
+            customData = JSON.parse(customDataRaw);
             Logger.write("[ASR] Parsed customData: " + JSON.stringify(customData));
         } catch (err) {
             Logger.write("[ASR] Failed to parse customData: " + err);
@@ -229,19 +232,27 @@ function processTextWithAI(userText) {
     var requestStart = Date.now();
     Logger.write("[LATENCY-VXI] Starting backend request | user_text_length=" + userText.length);
 
-    var url =
-        backendUrl +
-        "/voximplant/process_text?call_id=" +
-        encodeURIComponent(callId) +
-        "&user_text=" +
-        encodeURIComponent(userText);
+    var url = backendUrl + "/voximplant/process_text";
+
+    // Prepare POST body with all data
+    var postData = {
+        call_id: callId,
+        user_text: userText
+    };
 
     // Add custom prompt if provided
     if (systemPrompt) {
-        url += "&prompt=" + encodeURIComponent(systemPrompt);
+        postData.prompt = systemPrompt;
     }
 
-    Net.httpRequest(url, function (response) {
+    // Send POST request with JSON body
+    Net.httpRequestAsync(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        postData: JSON.stringify(postData)
+    }).then(function (response) {
         var requestDuration = Date.now() - requestStart;
 
         if (response.code !== 200) {
@@ -264,6 +275,10 @@ function processTextWithAI(userText) {
             Logger.write("[LATENCY-VXI] ❌ Failed to parse response after " + requestDuration + "ms | error=" + e);
             handleError();
         }
+    }).catch(function (error) {
+        var requestDuration = Date.now() - requestStart;
+        Logger.write("[LATENCY-VXI] ❌ Backend request error after " + requestDuration + "ms | error=" + error);
+        handleError();
     });
 }
 
