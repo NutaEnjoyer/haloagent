@@ -170,13 +170,14 @@ async def create_demo_session(
                 "demo_session_id": str(session.id),
                 "phone": request.phone,
                 "greeting": request.greeting,
-                "prompt": request.prompt
+                "prompt": request.prompt,
+                "voice": request.voice.value  # "male", "female", or "neutral"
             }
 
             logger.info(
                 f"Starting Voximplant ASR call | "
                 f"demo_session_id={session.id} | call_id={voximplant_call_id} | "
-                f"phone={request.phone} | "
+                f"phone={request.phone} | voice={request.voice.value} | "
                 f"greeting={request.greeting[:50]}... | prompt={request.prompt[:50]}..."
             )
             logger.info(f"script_custom_data: {json.dumps(script_custom_data, ensure_ascii=False)}")

@@ -9,6 +9,7 @@ var backendUrl = "https://halo-ai.ru/api";
 var webhookUrl = backendUrl + "/voximplant/events";
 var greetingMessage = "Здравствуйте! Я голосовой ассистент HALO. Чем могу помочь?";
 var systemPrompt = "";
+var voiceType = Language.RU_RUSSIAN_FEMALE;  // Default voice, can be overridden by customData
 
 var currentCall = null;
 var currentASR = null;
@@ -63,6 +64,19 @@ VoxEngine.addEventListener(AppEvents.Started, function () {
         if (customData.prompt) {
             systemPrompt = customData.prompt;
             Logger.write("[ASR] Using custom prompt (length: " + systemPrompt.length + ")");
+        }
+
+        // Get voice type from demo session
+        if (customData.voice) {
+            // Map voice types: "male", "female", "neutral"
+            if (customData.voice === "male") {
+                voiceType = Language.RU_RUSSIAN_MALE;
+            } else if (customData.voice === "female") {
+                voiceType = Language.RU_RUSSIAN_FEMALE;
+            } else if (customData.voice === "neutral") {
+                voiceType = Language.RU_RUSSIAN_NEUTRAL;
+            }
+            Logger.write("[ASR] Using voice type: " + customData.voice);
         }
     }
 
@@ -288,7 +302,7 @@ function speak(text, hangupAfter) {
     Logger.write("[TTS] Say: " + text);
 
     isSpeaking = true;  // Mark that AI is speaking
-    currentCall.say(text, Language.RU_RUSSIAN_FEMALE);
+    currentCall.say(text, voiceType);
 
     // Enable barge-in: start listening while AI speaks
     // ASR profile should handle echo cancellation
