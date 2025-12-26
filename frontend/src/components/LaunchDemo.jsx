@@ -37,9 +37,12 @@ function LaunchDemo() {
     setLoading(true)
 
     try {
-      console.log('Creating demo session...')
+      // Clean phone number - remove all non-digit characters except leading +
+      const cleanPhone = formData.phone.replace(/[^\d+]/g, '')
+      console.log('Creating demo session with cleaned phone:', cleanPhone)
+
       const response = await demoAPI.createDemoSession(
-        formData.phone,
+        cleanPhone,
         formData.language,
         formData.voice,
         formData.greeting,
