@@ -106,10 +106,13 @@ class DemoSessionStatus(str, Enum):
 
 
 class Voice(str, Enum):
-    """Voice type for assistant."""
-    MALE = "male"
-    FEMALE = "female"
-    NEUTRAL = "neutral"
+    """Voice type for assistant - OpenAI TTS voices."""
+    ALLOY = "alloy"
+    ECHO = "echo"
+    FABLE = "fable"
+    ONYX = "onyx"
+    NOVA = "nova"
+    SHIMMER = "shimmer"
 
 
 class Language(str, Enum):

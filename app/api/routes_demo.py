@@ -35,13 +35,6 @@ demo_sessions: dict[str, DemoSession] = {}
 real_calls: dict[str, Any] = {}  # Will store real call data
 real_chats: dict[str, Any] = {}  # Will store real chat data
 
-# Voice mapping: Voice enum -> OpenAI Realtime API voice names
-VOICE_MAPPING = {
-    Voice.MALE: "alloy",      # Male voice
-    Voice.FEMALE: "shimmer",  # Female voice
-    Voice.NEUTRAL: "echo"     # Neutral voice
-}
-
 
 # ============================================================================
 # Request/Response Models
@@ -51,7 +44,7 @@ class CreateDemoSessionRequest(BaseModel):
     """Request to create a demo session."""
     phone: str = Field(..., description="Phone number in international format")
     language: Language = Field(default=Language.AUTO, description="Language for assistant")
-    voice: Voice = Field(default=Voice.FEMALE, description="Voice type")
+    voice: Voice = Field(default=Voice.SHIMMER, description="Voice type (OpenAI TTS voice)")
     greeting: str = Field(..., description="Initial greeting message")
     prompt: str = Field(..., description="Custom prompt for assistant")
 
@@ -171,7 +164,7 @@ async def create_demo_session(
                 "phone": request.phone,
                 "greeting": request.greeting,
                 "prompt": request.prompt,
-                "voice": request.voice.value  # "male", "female", or "neutral"
+                "voice": request.voice.value  # OpenAI TTS voice: alloy, echo, fable, onyx, nova, shimmer
             }
 
             logger.info(

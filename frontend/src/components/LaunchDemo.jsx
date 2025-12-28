@@ -7,7 +7,7 @@ function LaunchDemo() {
   const [formData, setFormData] = useState({
     phone: '',
     language: 'auto',
-    voice: 'female',
+    voice: 'shimmer',
     greeting: 'Здравствуйте! Я голосовой ассистент HALO. Чем могу помочь?',
     prompt: 'Ты — живой человек, который позвонил по делу. Не оператор колл-центра, не робот. Ты ведёшь нормальный разговор, реагируешь на собеседника, говоришь коротко и по делу. Если человек говорит просто — ты отвечаешь просто. Используй живую разговорную речь. Не спорь, не давишь, разговариваешь на равных.'
   })
@@ -121,9 +121,12 @@ function LaunchDemo() {
             value={formData.voice}
             onChange={handleChange}
           >
-            <option value="male">Мужской</option>
-            <option value="female">Женский</option>
-            <option value="neutral">Нейтральный</option>
+            <option value="alloy">Alloy (нейтральный)</option>
+            <option value="echo">Echo (мужской)</option>
+            <option value="fable">Fable (британский мужской)</option>
+            <option value="onyx">Onyx (глубокий мужской)</option>
+            <option value="nova">Nova (женский)</option>
+            <option value="shimmer">Shimmer (мягкий женский)</option>
           </select>
         </div>
 

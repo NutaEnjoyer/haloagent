@@ -68,15 +68,26 @@ VoxEngine.addEventListener(AppEvents.Started, function () {
 
         // Get voice type from demo session
         if (customData.voice) {
-            // Map voice types: "male", "female", "neutral"
-            if (customData.voice === "male") {
+            // Map OpenAI TTS voice types to Voximplant voices
+            // OpenAI voices: alloy, echo, fable, onyx, nova, shimmer
+            var voiceName = customData.voice.toLowerCase();
+            if (voiceName === "echo" || voiceName === "fable" || voiceName === "onyx") {
                 voiceType = Language.RU_RUSSIAN_MALE;
-            } else if (customData.voice === "female") {
+            } else if (voiceName === "nova" || voiceName === "shimmer") {
                 voiceType = Language.RU_RUSSIAN_FEMALE;
-            } else if (customData.voice === "neutral") {
+            } else if (voiceName === "alloy") {
                 voiceType = Language.RU_RUSSIAN_NEUTRAL;
+            } else {
+                // Fallback for backward compatibility with old values
+                if (voiceName === "male") {
+                    voiceType = Language.RU_RUSSIAN_MALE;
+                } else if (voiceName === "female") {
+                    voiceType = Language.RU_RUSSIAN_FEMALE;
+                } else if (voiceName === "neutral") {
+                    voiceType = Language.RU_RUSSIAN_NEUTRAL;
+                }
             }
-            Logger.write("[ASR] Using voice type: " + customData.voice);
+            Logger.write("[ASR] Using voice type: " + customData.voice + " -> " + voiceType);
         }
     }
 

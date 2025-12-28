@@ -10,7 +10,7 @@ function Templates() {
       category: 'sales',
       prompt: 'Вы - вежливый оператор call-центра HALO. Ваша задача: представить продукт, узнать интерес клиента и предложить следующие шаги.',
       language: 'auto',
-      voice: 'female'
+      voice: 'nova'
     },
     {
       id: 2,
@@ -18,7 +18,7 @@ function Templates() {
       category: 'sales',
       prompt: 'Вы - активный менеджер по продажам. Ваша цель - максимально заинтересовать клиента и закрыть сделку. Будьте настойчивы, но вежливы.',
       language: 'ru',
-      voice: 'male'
+      voice: 'onyx'
     },
     {
       id: 3,
@@ -26,7 +26,7 @@ function Templates() {
       category: 'support',
       prompt: 'Вы - сотрудник технической поддержки. Помогите клиенту решить его проблему, задавайте уточняющие вопросы и предлагайте решения.',
       language: 'auto',
-      voice: 'neutral'
+      voice: 'alloy'
     },
     {
       id: 4,
@@ -34,7 +34,7 @@ function Templates() {
       category: 'survey',
       prompt: 'Вы проводите опрос удовлетворенности клиентов. Задайте 3-5 вопросов о качестве обслуживания и запишите ответы.',
       language: 'ru',
-      voice: 'female'
+      voice: 'shimmer'
     }
   ])
 
@@ -47,7 +47,7 @@ function Templates() {
     category: 'sales',
     prompt: '',
     language: 'auto',
-    voice: 'female'
+    voice: 'shimmer'
   })
 
   const handleEdit = (template) => {
@@ -62,7 +62,7 @@ function Templates() {
       category: 'sales',
       prompt: '',
       language: 'auto',
-      voice: 'female'
+      voice: 'shimmer'
     })
     setIsCreating(true)
   }
@@ -185,9 +185,12 @@ function Templates() {
             value={formData.voice}
             onChange={handleChange}
           >
-            <option value="male">Мужской</option>
-            <option value="female">Женский</option>
-            <option value="neutral">Нейтральный</option>
+            <option value="alloy">Alloy (нейтральный)</option>
+            <option value="echo">Echo (мужской)</option>
+            <option value="fable">Fable (британский мужской)</option>
+            <option value="onyx">Onyx (глубокий мужской)</option>
+            <option value="nova">Nova (женский)</option>
+            <option value="shimmer">Shimmer (мягкий женский)</option>
           </select>
         </div>
 
@@ -281,7 +284,7 @@ function Templates() {
                 {template.language === 'auto' ? 'Auto' : template.language.toUpperCase()}
               </span>
               <span className="badge" style={{ background: 'rgba(255, 255, 255, 0.05)' }}>
-                {template.voice === 'male' ? '🎙️ Мужской' : template.voice === 'female' ? '🎤 Женский' : '🔊 Нейтральный'}
+                🎤 {template.voice.charAt(0).toUpperCase() + template.voice.slice(1)}
               </span>
             </div>
 

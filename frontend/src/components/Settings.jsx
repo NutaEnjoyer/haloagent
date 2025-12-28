@@ -8,7 +8,7 @@ function Settings() {
 
     // Default Call Settings
     defaultLanguage: 'auto',
-    defaultVoice: 'female',
+    defaultVoice: 'shimmer',
     callTimeout: 120,
 
     // Notifications
@@ -47,7 +47,7 @@ function Settings() {
         apiUrl: 'http://localhost:8000',
         apiKey: '',
         defaultLanguage: 'auto',
-        defaultVoice: 'female',
+        defaultVoice: 'shimmer',
         callTimeout: 120,
         enableNotifications: true,
         emailNotifications: false,
@@ -159,9 +159,12 @@ function Settings() {
               value={settings.defaultVoice}
               onChange={handleChange}
             >
-              <option value="male">Мужской</option>
-              <option value="female">Женский</option>
-              <option value="neutral">Нейтральный</option>
+              <option value="alloy">Alloy (нейтральный)</option>
+              <option value="echo">Echo (мужской)</option>
+              <option value="fable">Fable (британский мужской)</option>
+              <option value="onyx">Onyx (глубокий мужской)</option>
+              <option value="nova">Nova (женский)</option>
+              <option value="shimmer">Shimmer (мягкий женский)</option>
             </select>
           </div>
 
